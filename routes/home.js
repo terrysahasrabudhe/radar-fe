@@ -11,12 +11,16 @@ var username = '';
 router.get('/', getUser, renderUser);
 
 function getUser(req, res, next) {
-	request.get('http://localhost:3001/', function(err,response,body){
+	var options = {
+		url: 'http://localhost:3001'
+	}
+	if(typeof req.query.code != 'undefined'){
+		options.qs = {code: req.query.code}
+	}
+	request.get(options, function(err,response,body){
 		parsed = JSON.parse(body);
-		console.log(parsed.user)
 		req.username = parsed.user;
 		req.accessToken = parsed.accessToken;
-		console.log(username);
 		next();
 	});
 }
@@ -25,24 +29,45 @@ function renderUser(req,res,next) {
 	res.render('home', { user: req.username,accessToken : req.accessToken});
 }
 
-router.post('/', function(req, res, next){
-	 if (accessToken == "") {
-	 	res.send("Please authorise the application to use.");
-	 } else {
+router.post('/', checkValid,getData,loadData);
 
+function checkValid(req, res, next) {
+	if (req.body.token === "") {
+		res.send("Please authorise the application to use.");
+	} else if(isNaN(req.body.days) || isNaN(req.body.daysEnd)){
+		res.redirect('/');
+	} else{
+		next();
+	}
+}
 
-	 var username = req.body.username;
-	 var repo = req.body.repo;
-	 var token = accessToken;
-	 var days = req.body.days;
-	 var daysEnd = req.body.daysEnd;
-	 var state = req.body.state;
-	 if (isNaN(days) || isNaN(daysEnd)) {
-	 	res.redirect('/');
-	 }
-     res.redirect('/issues?username=' + username + "&repo=" + repo + "&token=" + token + "&days=" + days + "&daysEnd=" + daysEnd + "&state=" + state);
+function getData(req, res, next) {
+	var options = {
+		url: 'http://localhost:3001' + 
+		'/issues?username=' + req.body.username + 
+		"&repo=" + req.body.repo + 
+		"&token=" + req.body.token + 
+		"&days=" + req.body.days + 
+		"&daysEnd=" + req.body.daysEnd + 
+		"&state=" + req.body.state
 	}
 
-})
+	request.get(options, function(err,response,body){
+		parsed = JSON.parse(body);
+		req.indexData = parsed.indexData;
+		req.state = parsed.state;
+		next();
+	});
+}
+
+function loadData(req, res, next) {
+	console.log(req.indexData);
+	console.log(req.state);
+	if (req.state == "open") {
+		res.render('open',{indexData:req.indexData,state: "Open Issues"});
+	} else {
+		res.render('closed',{indexData:req.indexData,state: "Closed Issues"});
+	}
+}
 
 module.exports = router;
