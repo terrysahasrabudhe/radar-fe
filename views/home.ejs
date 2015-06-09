@@ -17,10 +17,10 @@
   <div class="loginbox">
   <div id="panel">
   <br>
-   <center> <h1 class = "animated bounceInLeft"> Welcome <%= user %> !! </h1></center>
+   <center> <h1 class = "animated bounceInLeft"> Welcome <%= user %>!! </h1></center>
   <br>
 <% if (user == 'User') { %>
-<center><button onclick="location.href = 'https://github.com/login/oauth/authorize?client_id=966ce4cafe87b84a29c5&scope=repo';" id="SignUp" class="btn btn-lg btn-success" >Github OAuth</button></center>
+<center><button onclick="location.href = 'https://github.com/login/oauth/authorize?client_id=966ce4cafe87b84a29c5&redirect_uri=http://localhost:3000/auth&scope=repo';" id="SignUp" class="btn btn-lg btn-success" >Github OAuth</button></center>
 <br>
 <br><% } %>
 

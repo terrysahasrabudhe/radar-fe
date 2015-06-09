@@ -1,12 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var https = require('https');
-var http = require('http');
-var accessToken='';
 var request= require('request');
-var code = "";
-var res1;
-var username = '';
+
 /* GET users listing. */
 router.get('/', getUser, renderUser);
 
@@ -29,11 +24,23 @@ function renderUser(req,res,next) {
 	res.render('home', { user: req.username,accessToken : req.accessToken});
 }
 
+router.get('/auth', authUser);
+
+function authUser(req,res,next) {
+	var options = {
+		url: 'http://localhost:3001',
+		qs: {code: req.query.code}
+	}
+	request.get(options, function(err,response,body){
+		res.redirect('/');
+	});
+}
+
 router.post('/', checkValid,getData,loadData);
 
 function checkValid(req, res, next) {
 	if (req.body.token === "") {
-		res.send("Please authorise the application to use.");
+		res.send("Please authorise the application for use.");
 	} else if(isNaN(req.body.days) || isNaN(req.body.daysEnd)){
 		res.redirect('/');
 	} else{
