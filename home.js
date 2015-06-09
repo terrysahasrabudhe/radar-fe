@@ -5,9 +5,11 @@ var request= require('request');
 /* GET users listing. */
 router.get('/', getUser, renderUser);
 
+API_URL = 'http://localhost:3001'
+
 function getUser(req, res, next) {
 	var options = {
-		url: 'http://localhost:3001'
+		url: API_URL
 	}
 	if(typeof req.query.code != 'undefined'){
 		options.qs = {code: req.query.code}
@@ -28,7 +30,7 @@ router.get('/auth', authUser);
 
 function authUser(req,res,next) {
 	var options = {
-		url: 'http://localhost:3001',
+		url: API_URL,
 		qs: {code: req.query.code}
 	}
 	request.get(options, function(err,response,body){
@@ -50,7 +52,7 @@ function checkValid(req, res, next) {
 
 function getData(req, res, next) {
 	var options = {
-		url: 'http://localhost:3001' + 
+		url: API_URL + 
 		'/issues?username=' + req.body.username + 
 		"&repo=" + req.body.repo + 
 		"&token=" + req.body.token + 
