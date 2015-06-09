@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Issues</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/animate.css' />
+
+    <link rel='stylesheet' href='/stylesheets/hover.css' />
+      <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="icon" href="http://getbootstrap.com/favicon.ico">
+  
+  </head>
+  <body>
+  <div class="issueReport" style="width:50%;margin:0 auto">
+  <div id="panel">
+    <h2><%=state %> in <%=indexData.repo%></h2>
+    <table class="table table-striped" style="padding:50px 50px 50px 50px">
+    <thead>
+      <tr>
+         <th># of issues opened within the last <%= indexData.days %> to  <%= indexData.daysEnd %> days</th>
+        <th style="text-align:right"><%= indexData.numberOfIssues %></th>
+      </tr>
+      <tr>
+         <th>Total # of open issues</th>
+        <th style="text-align:right"><%= indexData.totalNumber %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+<br>
+  <%if(indexData.repo=="shippable/support"){%>
+  <h3>Type and status of issues opened within the last <%= indexData.days %> to  <%= indexData.daysEnd %> days</h3>
+  <table class="table" style="border-spacing:80px">
+    <thead>
+      <tr>
+        <th></th>
+        <th><button type="button" class="btn btn-success">resolved</button></th>
+        <th><button type="button" class="btn btn-info">triaged</button></th>
+        <th><button type="button" class="btn btn-primary">in progress</button></th>
+        <th><button type="button" class="btn btn-default">other</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th><button type="button" class="btn btn-info">question</button></th>
+        <%for(i=0;i<indexData.stateNameArray.length;i++){%>
+        <td><%=indexData.issueMatrix[0][i]%></td><%};%>
+      </tr>
+      <tr>
+        <th><button type="button" class="btn btn-danger">bug</button></th>
+        <%for(i=0;i<indexData.stateNameArray.length;i++){%>
+        <td><%=indexData.issueMatrix[1][i]%></td><%};%>
+      </tr>
+      <tr>
+        <th><button type="button" class="btn btn-primary">feature request</button></th>
+        <%for(i=0;i<indexData.stateNameArray.length;i++){%>
+        <td><%=indexData.issueMatrix[2][i]%></td><%};%>
+      </tr>
+      <tr>
+        <th><button type="button" class="btn btn-default">other</button></th>
+        <%for(i=0;i<indexData.stateNameArray.length;i++){%>
+        <td><%=indexData.issueMatrix[3][i]%></td><%};%>
+      </tr>
+    </tbody>
+  </table>
+  <%};%>
+  <br>
+  <h3>Age of open issues</h3>
+  <table class="table table-striped" style="padding:50px 50px 50px 50px">
+    <thead>
+      <tr>
+        <th>Days passed since creation</th>
+        <% for(i=0;i<indexData.noIssues.length;i++){%>
+        <% if(i==0){%>
+        <th style="text-align:center">less than <%=indexData.obsWindow[i]%></th><% ;}%>
+        <% if(i==indexData.noIssues.length-1){%>
+        <th style="text-align:center">more than <%=indexData.obsWindow[i-1]%></th><% ;}%>
+        <% if(i!=0 && i!=indexData.noIssues.length-1){%>
+          <th style="text-align:center"><%=indexData.obsWindow[i-1]%> to <%=indexData.obsWindow[i]%></th><% ;}%>
+          <%};%>
+      </tr>
+      <tr>
+        <th># of issues</th>
+        <% for(i=0;i<indexData.noIssues.length;i++){%>
+        <th style="text-align:center"><%= indexData.noIssues[i] %></th><% }; %>
+      </tr>
+    </thead>
+  </table>
+<br><br>
+<button onclick="location.href = './';" id="Back" class="btn btn-lg btn-default"> <span class="glyphicon glyphicon-arrow-left"></span>  Back</button>
+</div>
+</div>
+  </body>
+</html>

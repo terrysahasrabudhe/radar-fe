@@ -1,0 +1,20 @@
+body {
+    padding-top: 90px;
+}
+.loginbox{
+	width:50%;
+	margin: 0px auto ;
+}
+
+
+
+#panel{
+	padding:50 50 50 50;
+
+	 width:750px;
+    height:600px;
+    background:#f0f0f0;
+}
+ #SignUp{
+ 	text-align: right;
+ }
