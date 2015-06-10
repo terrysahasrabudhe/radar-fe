@@ -2,6 +2,8 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 
 var home = require('./home');
@@ -15,10 +17,13 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('secret'));
+app.use(session({cookie: { maxAge: 3600000 }}));
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', home);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -11,7 +11,14 @@ input {
     width: 200px;
 }
 
-#centerForm {
-    width:250px; 
-    margin: 0 auto;
+body {
+    padding-top: 90px;
+}
+.box{
+    width:50%;
+    margin: 0px auto ;
+}
+
+.panel{
+    background:#f0f0f0;
 }

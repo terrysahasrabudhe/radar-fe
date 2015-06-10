@@ -3,62 +3,50 @@
   <head>
     <title>Issue Timeline</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/animate.css' />
-    <link rel='stylesheet' href='/stylesheets/homePage.css' />
-    <link rel='stylesheet' href='/stylesheets/hover.css' />
-      <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
-<link rel="icon" href="http://getbootstrap.com/favicon.ico">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </head>
+
   <body>
-  <div class="loginbox">
-  <div id="panel">
-  <br>
-   <center> <h1>Github Issue Radar</h1></center>
-  <br>
-<% if (user == 'User') { %>
-<center><button onclick="location.href = 'https://github.com/login/oauth/authorize?client_id=966ce4cafe87b84a29c5&redirect_uri=http://localhost:3000/auth&scope=repo';" id="SignUp" class="btn btn-lg btn-success" >Github OAuth</button></center>
-<br>
-<br><% } %>
-
-<div class="conatiner">
-  
-  <form method="post" action="./" class="form-inline" role="form" style="padding:50px">
-    <div class="form-group">
-      <label for="username">Github Repo Path:</label>
-        <input type="text" class="form-control" name="username" value="shippable">
+    <div class="box">
+      <div class="panel panel-body" style="background:#f0f0f0;">
+        <br>
+         <center> <h1>Github Issue Radar</h1></center>
+        <br>
+        <div>
+          <div>
+            <%if(message.length>0) { %>
+              <div class="alert alert-danger" style="text-align:center"><%= message %></div>
+            <% } %>
+            <%if(message.length==0) { %>
+              <div class="alert alert-success" style="text-align:center">Get an access token (Github -> Settings -> Personal Access Tokens) and put it below.<br> Choose a repository to view, the number of days back, and either open or closed issues.</div>
+              <% } %>
+          </div>
+          <form method="post" action="./" class="form-inline" role="form" autocomplete="off">
+            <div class="span7 text-center">
+              <label for="username">Github Repo Path:</label>
+                <input type="text" class="form-control" name="repo" value=<%= repo %>>
+            </div><br>
+            <div class="span7 text-center">
+              <label for="days"><b>Range of Days Ago:</b></label>
+              <input type="text" class="form-control" name="days" value=<%= days %>>
+              <label for="daysEnd"> to </label>
+              <input type="text" class="form-control" name="daysEnd" value=<%= daysEnd %>>
+            </div><br>
+            <div class="span7 text-center">
+              <label for="token">Access Token: </label>
+              <input type="text" class="form-control" name="token" value=<%= accessToken %>>
+            </div><br><br>
+            <div class="span7 text-center">
+              <button type="submit" name="state" class="btn btn-primary btn-lg" value="Open" style="padding:10px 80px 10px 80px">Open</button>
+              <button type="submit" name="state" class="btn btn-primary btn-lg" value="Close" style="padding:10px 80px 10px 80px">Closed</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="repo" style="font-size:24px">&nbsp;/&nbsp;</label>
-        <input type="text" class="form-control" name="repo" value="support">
-    </div>
-    <br><br>
-    <div class="form-group">
-      <label for="days" style="margin-right:20px"><b>Range of Days Ago:</b></label>
-      <input type="text" class="form-control" name="days" value="0">
-    </div>
-    <div class="form-group">
-      <label for="daysEnd" style="margin-left:10px;margin-right:10px"> to </label>
-      <input type="text" class="form-control" name="daysEnd" value="5">
-    </div>
-    <br><br>
-    <div class="form-group">
-      <label for="token">Access Token: </label>
-      <input type="text" class="form-control" name="token" value=<%= accessToken %>>
-    </div>
-
-    <br><br><br>
-
-    <div class="col-sm-offset-1 col-sm-10">
-      <button type="submit" name="state" class="btn btn-primary btn-lg" value="Open" style="padding:10px 100px 10px 100px">Open</button>
-      <button type="submit" name="state" class="btn btn-primary btn-lg" value="Close" style="padding:10px 100px 10px 100px">Closed</button>
-    </div>
-  </form>
-  </div>
-  </div>
-</div>
   </body>
 </html>

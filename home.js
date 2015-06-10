@@ -3,47 +3,52 @@ var router = express.Router();
 var request= require('request');
 
 /* GET users listing. */
-router.get('/', getUser, renderUser);
+router.get('/', getToken, renderHome);
 
 API_URL = 'http://localhost:3001';
 
-function getUser(req, res, next) {
-  var options = {
+repo = 'shippable/support';
+days = 0;
+daysEnd = 5;
+
+function getToken(req, res, next) {
+  var options = { 
     url: API_URL
   };
-  if(typeof req.query.code != 'undefined'){
-    options.qs = {code: req.query.code};
-  }
   request.get(options, function(err,response,body){
-    parsed = JSON.parse(body);
-    req.username = parsed.user;
-    req.accessToken = parsed.accessToken;
-    next();
+    if (err){
+      res.send('Can\'t connect to api');
+    }
+    else {
+      parsed = JSON.parse(body);
+      req.accessToken = parsed.accessToken;
+      next();
+    }
   });
 }
 
-function renderUser(req,res,next) {
-  res.render('home', { user: req.username,accessToken : req.accessToken});
-}
-
-router.get('/auth', authUser);
-
-function authUser(req,res,next) {
-  var options = {
-    url: API_URL,
-    qs: {code: req.query.code}
-  };
-  request.get(options, function(err,response,body){
-    res.redirect('/');
-  });
+function renderHome(req,res,next) {
+  res.render('home', {message:req.flash('error'),
+    repo:repo,
+    days:days,
+    daysEnd:daysEnd,
+    accessToken:req.accessToken});
 }
 
 router.post('/', checkValid,getData,loadData);
 
 function checkValid(req, res, next) {
-  if (req.body.token === "") {
-    res.send("Please authorise the application for use.");
-  } else if(isNaN(req.body.days) || isNaN(req.body.daysEnd)){
+  repo = req.body.repo;
+  days = req.body.days;
+  daysEnd = req.body.daysEnd;
+  if (req.body.token === '') {
+    req.flash('error','Please give your access token!');
+    res.redirect('/');
+  } else if(isNaN(parseInt(req.body.days)) || isNaN(parseInt(req.body.daysEnd)) ||
+    req.body.daysEnd - req.body.days < 0 ||
+    req.body.days < 0 || req.body.daysEnd <  0||
+    req.body.days % 1 !== 0 || req.body.daysEnd % 1 !== 0){
+    req.flash('error','Please put a valid range of days!');
     res.redirect('/');
   } else{
     next();
@@ -53,12 +58,11 @@ function checkValid(req, res, next) {
 function getData(req, res, next) {
   var options = {
     url: API_URL + 
-    '/issues?username=' + req.body.username +
-    "&repo=" + req.body.repo +
-    "&token=" + req.body.token +
-    "&days=" + req.body.days +
-    "&daysEnd=" + req.body.daysEnd +
-    "&state=" + req.body.state
+    '/issues?&repo=' + req.body.repo +
+    '&token=' + req.body.token +
+    '&days=' + req.body.days +
+    '&daysEnd=' + req.body.daysEnd +
+    '&state=' + req.body.state
   };
 
   request.get(options, function(err,response,body){
@@ -70,12 +74,20 @@ function getData(req, res, next) {
 }
 
 function loadData(req, res, next) {
-  console.log(req.indexData);
-  console.log(req.state);
-  if (req.state == "open") {
+  if (req.state == 'open') {
     res.render('open',{indexData:req.indexData,state: "Open Issues"});
-  } else {
+  } else if (req.state == 'closed'){
     res.render('closed',{indexData:req.indexData,state: "Closed Issues"});
+  } else if (req.state == 'accessError'){
+    req.flash('error','Please check your access token!');
+    res.redirect('/');
+  } else if (req.state == 'repoError'){
+    req.flash('error','Invalid repo!');
+    res.redirect('/');
+  } else{
+    console.log(req.state);
+    req.flash('error','Unknown error');
+    res.redirect('/');
   }
 }
 
