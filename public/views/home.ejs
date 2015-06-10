@@ -17,7 +17,7 @@
   <div class="loginbox">
   <div id="panel">
   <br>
-   <center> <h1 class = "animated bounceInLeft"> Welcome <%= user %>!! </h1></center>
+   <center> <h1>Github Issue Radar</h1></center>
   <br>
 <% if (user == 'User') { %>
 <center><button onclick="location.href = 'https://github.com/login/oauth/authorize?client_id=966ce4cafe87b84a29c5&redirect_uri=http://localhost:3000/auth&scope=repo';" id="SignUp" class="btn btn-lg btn-success" >Github OAuth</button></center>
@@ -26,30 +26,36 @@
 
 <div class="conatiner">
   
-  <form method="post" action="./" class="form-horizontal" role="form" style="padding:50px">
+  <form method="post" action="./" class="form-inline" role="form" style="padding:50px">
     <div class="form-group">
-      <label class="control-label col-sm-2" for="username">Github Username:</label>
-      <div class="col-sm-10">
+      <label for="username">Github Repo Path:</label>
         <input type="text" class="form-control" name="username" value="shippable">
-      </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-sm-2" for="repo">Repository Name:</label>
-      <div class="col-sm-10">          
+      <label for="repo" style="font-size:24px">&nbsp;/&nbsp;</label>
         <input type="text" class="form-control" name="repo" value="support">
-      </div>
     </div>
-    <br>
-   <input type="hidden" name="token" value=<%= accessToken %>>
-<span style="margin-right:20px"><b>Range of Days:     </b>
-<input type="text" name="days" value="2"><span style="margin-left:10px;margin-right:10px"> to </span> <input type="text" name="daysEnd" value="5">
-   <br><br><br><br>
-         
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" name="state" class="btn btn-primary btn-lg" value="Open" style="padding:10px 100px 10px 100px">Open</button>
-        <button type="submit" name="state" class="btn btn-primary btn-lg" value="Close" style="padding:10px 100px 10px 100px">Closed</button>
-      </div>
-  
+    <br><br>
+    <div class="form-group">
+      <label for="days" style="margin-right:20px"><b>Range of Days Ago:</b></label>
+      <input type="text" class="form-control" name="days" value="0">
+    </div>
+    <div class="form-group">
+      <label for="daysEnd" style="margin-left:10px;margin-right:10px"> to </label>
+      <input type="text" class="form-control" name="daysEnd" value="5">
+    </div>
+    <br><br>
+    <div class="form-group">
+      <label for="token">Access Token: </label>
+      <input type="text" class="form-control" name="token" value=<%= accessToken %>>
+    </div>
+
+    <br><br><br>
+
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="submit" name="state" class="btn btn-primary btn-lg" value="Open" style="padding:10px 100px 10px 100px">Open</button>
+      <button type="submit" name="state" class="btn btn-primary btn-lg" value="Close" style="padding:10px 100px 10px 100px">Closed</button>
+    </div>
   </form>
   </div>
   </div>
