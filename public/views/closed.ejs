@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>Issues</title>
+   <link rel='stylesheet' href='/stylesheets/style.css' />
+   <link rel='stylesheet' href='/stylesheets/animate.css' />    <link rel='stylesheet' href='/stylesheets/hover.css' />
+     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="icon" href="http://getbootstrap.com/favicon.ico">
+ 
+ </head>
+ <body>
+ <div class="issueReport" style="width:50%;margin:0 auto">
+ <div id="panel">
+   <h2><%=state %> in <%=indexData.repo%></h2>
+   <table class="table table-striped" style="padding:50px 50px 50px 50px">
+   <thead>
+     <tr>
+        <th># of issues closed within <%= indexData.days %> to  <%= indexData.daysEnd %> days of creation</th>
+       <th style="text-align:right"><%= indexData.numberOfIssues %></th>
+     </tr>      <tr>
+        <th># of issues closed  <%= indexData.days %> to  <%= indexData.daysEnd %> days ago</th>
+       <th style="text-align:right"><%= indexData.numberOfIssuesClosedWithin %></th>
+     </tr>      <tr>
+        <th>Total # of closed issues</th>
+       <th style="text-align:right"><%= indexData.totalNumber %></th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr>
+       <td></td>
+       <td></td>
+     </tr>
+   </tbody>
+ </table>  
+ <br>
+<h3>Issues Closed within days of creation# of days taken to close an issue</h3>
+ <table class="table table-striped" style="padding:50px 50px 50px 50px">
+   <thead>
+     <tr>
+       <th># of days taken to close</th>
+       <% for(i=0;i<indexData.noIssues.length;i++){%>
+       <% if(i==0){%>
+       <th style="text-align:center">less than <%=indexData.obsWindow[i]%></th><% ;}%>
+       <% if(i==indexData.noIssues.length-1){%>
+       <th style="text-align:center">more than <%=indexData.obsWindow[i-1]%></th><% ;}%>
+       <% if(i!=0 && i!=indexData.noIssues.length-1){%>
+         <th style="text-align:center"><%=indexData.obsWindow[i-1]%> to <%=indexData.obsWindow[i]%></th><% ;}%>
+         <%};%>
+     </tr>
+     <tr>
+       <th># of issues</th>
+       <% for(i=0;i<indexData.noIssues.length;i++){%>
+       <th style="text-align:center"><%= indexData.noIssues[i] %></th><% }; %>
+     </tr>
+   </thead>
+ </table>
+ <br>
+ <h3>Timeline of issues closed</h3>
+ <table class="table table-striped" style="padding:50px 50px 50px 50px">
+   <thead>
+     <tr>
+       <th>Closed in # of days </th>
+       <% for(i=0;i<indexData.noIssuesClosedWithin.length;i++){%>
+       <% if(i==0){%>
+       <th style="text-align:center">less than <%=indexData.obsWindow[i]%></th><% ;}%>
+       <% if(i==indexData.noIssuesClosedWithin.length-1){%>
+       <th style="text-align:center">more than <%=indexData.obsWindow[i-1]%></th><% ;}%>
+       <% if(i!=0 && i!=indexData.noIssuesClosedWithin.length-1){%>
+         <th style="text-align:center"><%=indexData.obsWindow[i-1]%> to <%=indexData.obsWindow[i]%></th><% ;}%>
+         <%};%>
+     </tr>
+     <tr>
+       <th># of issues</th>
+       <% for(i=0;i<indexData.noIssues.length;i++){%>
+       <th style="text-align:center"><%= indexData.noIssuesClosedWithin[i] %></th><% }; %>
+     </tr>
+   </thead>
+ </table><br><br>
+<button onclick="location.href = './';" id="Back" class="btn btn-lg btn-default"> <span class="glyphicon glyphicon-arrow-left"></span>  Back</button>
+</div>
+</div>
+ </body>
+</html>
