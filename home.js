@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var request= require('request');
 
+API_URL = process.env.API_URL || 'http://localhost:3001';
+
 /* GET users listing. */
 router.get('/', getToken, renderHome);
-
-API_URL = 'http://localhost:3001';
 
 repo = 'shippable/support';
 days = 0;
@@ -21,7 +21,9 @@ function getToken(req, res, next) {
     }
     else {
       parsed = JSON.parse(body);
-      req.accessToken = parsed.accessToken;
+      if (parsed.accessToken !== '')
+        req.accessToken = parsed.accessToken;
+      else req.accessToken = process.env.DEFAULT_TOKEN || '';
       next();
     }
   });
